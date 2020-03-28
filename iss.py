@@ -1,15 +1,37 @@
 #!/usr/bin/env python
 import requests
 import json
+import turtle
+import threading
 
 
 __author__ = 'Christian Rojas'
 
-
 a_url = 'http://api.open-notify.org/astros.json'
 b_url = 'http://api.open-notify.org/iss-now.json'
 
-# r = requests.get('http://api.open-notify.org/astros.json')
+map_img = 'map.gif'
+iss_img = 'iss.gif'
+
+s = turtle.getscreen()
+t = turtle.Turtle()
+
+
+# screen.bgpic(map_img)
+
+def set_cord():
+    threading.Timer(1.0, set_cord).start()
+    pos = get_geo()
+    x_cord = pos[1]
+    y_cord = pos[2]
+    
+    x_cord = float(x_cord)
+    y_cord = float(y_cord)
+
+    t.goto(x_cord,y_cord)
+
+    return "hi"
+    
 
 def get_response(url):
     if url:
@@ -46,8 +68,24 @@ def get_geo():
 
 
 def main():
+    s.bgpic(map_img)
+    s.addshape(iss_img)
+    t.shape(iss_img)
+
+    set_cord()
+
+    # x_cord = init_pos[1]
+    # y_cord = init_pos[2]
+    
+    # x_cord = float(x_cord)
+    # y_cord = float(y_cord)
+
+    # t.goto(x_cord,y_cord)
+    s.exitonclick()
+    threading.Timer(set_cord).cancel()
+
+
     astro_response = get_response(a_url)
-    print get_geo()
 
     a_list = []
     a_count = 0

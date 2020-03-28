@@ -16,11 +16,20 @@ iss_img = 'iss.gif'
 s = turtle.getscreen()
 t = turtle.Turtle()
 
+stopper = False
 
-# screen.bgpic(map_img)
 
+def func_repeater():
+    tik = threading.Timer(5.0, func_repeater)
+
+    set_cord()
+    tik.start()
+
+    if stopper == True:
+        tik.cancel()
+
+""" set position of ISS on map"""
 def set_cord():
-    threading.Timer(1.0, set_cord).start()
     pos = get_geo()
     x_cord = pos[1]
     y_cord = pos[2]
@@ -30,9 +39,11 @@ def set_cord():
 
     t.goto(x_cord,y_cord)
 
-    return "hi"
+    print str(x_cord) + " " + str(y_cord)
+
     
 
+""" func to get response from a url """
 def get_response(url):
     if url:
         print('Response OK')
@@ -72,19 +83,6 @@ def main():
     s.addshape(iss_img)
     t.shape(iss_img)
 
-    set_cord()
-
-    # x_cord = init_pos[1]
-    # y_cord = init_pos[2]
-    
-    # x_cord = float(x_cord)
-    # y_cord = float(y_cord)
-
-    # t.goto(x_cord,y_cord)
-    s.exitonclick()
-    threading.Timer(set_cord).cancel()
-
-
     astro_response = get_response(a_url)
 
     a_list = []
@@ -95,9 +93,16 @@ def main():
     for item in astro_response['people']:
         a_list.append(item['name'] + ": " +  item['craft'])
         a_count += 1
-    
 
-    # print str(a_list) + " " + str(a_count)  
+    print a_list
+
+    """ plot location of ISS on map"""
+    set_cord()
+    func_repeater()
+
+    """ stop program from running """
+    s.exitonclick()
+    stopper = True
 
 
 if __name__ == '__main__':
